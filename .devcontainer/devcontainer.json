@@ -1,0 +1,15 @@
+{
+	// For format details, see https://aka.ms/vscode-remote/devcontainer.json
+	"name": "Go + Node.js",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {}
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {},
+			"extensions": []
+		}
+	},
+	"remoteUser": "vscode"
+}
