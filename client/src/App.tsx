@@ -1,16 +1,26 @@
+import { Markdown } from "@yamada-ui/markdown";
+import { Box, Button, Flex, Stack, Text, Textarea } from "@yamada-ui/react";
 import { useState } from "react";
 import { useWasm } from "./wasm";
 
 function App() {
 	const wasm = useWasm();
 	const [json, setJson] = useState<string>("");
-	const [result, setResult] = useState<string>();
+	const [result, setResult] = useState<string>("");
+	const [error, setError] = useState<string>();
 
 	const onClick = () => {
 		if (wasm.funcs) {
-			setResult(wasm.funcs.toGoStruct(json));
+			try {
+				setResult(wasm.funcs.toGoStruct(json));
+			} catch (e) {
+				if (e instanceof Error) {
+					setError(e.message);
+				}
+				console.error(e);
+			}
+			console.log(result);
 		}
-		console.log(result);
 	};
 
 	if (wasm.loading) {
@@ -21,21 +31,21 @@ function App() {
 		return <div>Error loading WebAssembly: {wasm.error.message}</div>;
 	}
 
-	return (
-		<div>
-			<h1>Wasm Consumer</h1>
+	const md = `\`\`\`golang\n${error ? error : result}\n\`\`\``;
 
-			<input
-				type="text"
-				id="a"
-				value={json}
-				onChange={(e) => setJson(e.target.value)}
-			/>
-			<button type="button" onClick={onClick}>
-				Make Go Struct
-			</button>
-			{result !== null && <p>Result: {result}</p>}
-		</div>
+	return (
+		<Flex height="100vh" direction="column">
+			<Text>Wasm Consumer</Text>
+			<Flex gap="md" padding="20px" align="center" height="100%">
+				<Textarea
+					placeholder="basic"
+					onChange={(e) => setJson(e.target.value)}
+					height="100%"
+				/>
+				<Button onClick={onClick}>Make Go Struct</Button>
+				<Markdown height="100%">{md}</Markdown>
+			</Flex>
+		</Flex>
 	);
 }
 

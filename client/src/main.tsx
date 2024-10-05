@@ -1,3 +1,4 @@
+import { UIProvider } from "@yamada-ui/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
@@ -11,7 +12,9 @@ if (!root) {
 createRoot(root).render(
 	<StrictMode>
 		<WasmProvider>
-			<App />
+			<UIProvider>
+				<App />
+			</UIProvider>
 		</WasmProvider>
 	</StrictMode>,
 );

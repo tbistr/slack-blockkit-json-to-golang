@@ -5,12 +5,13 @@ interface Funcs {
 	toGoStruct: typeof toGoStruct;
 }
 
-declare function toGoStructWasm(s: string): { result: string; error: string };
+declare function toGoStructWasm(s: string): { result: string; error?: string };
 
 const toGoStruct = (s: string): string => {
 	const { result, error } = toGoStructWasm(s);
-	console.log(result);
-	console.log(error);
+	if (error) {
+		throw new Error(error);
+	}
 	return result;
 };
 
