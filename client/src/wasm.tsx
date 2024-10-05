@@ -2,10 +2,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 interface Funcs {
-	Add: typeof add;
+	toGoStruct: typeof toGoStruct;
 }
 
-declare function add(a: number, b: number): number;
+declare function toGoStructWasm(s: string): { result: string; error: string };
+
+const toGoStruct = (s: string): string => {
+	const { result, error } = toGoStructWasm(s);
+	console.log(result);
+	console.log(error);
+	return result;
+};
 
 const WASM_BIN = "/main.wasm";
 
@@ -18,7 +25,7 @@ const initWasm = async (): Promise<Funcs> => {
 	const instance = result.instance;
 	go.run(instance);
 	return {
-		Add: add,
+		toGoStruct,
 	};
 };
 

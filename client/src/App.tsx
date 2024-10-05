@@ -3,11 +3,12 @@ import { useWasm } from "./wasm";
 
 function App() {
 	const wasm = useWasm();
-	const [result, setResult] = useState<number>();
+	const [json, setJson] = useState<string>("");
+	const [result, setResult] = useState<string>();
 
 	const onClick = () => {
 		if (wasm.funcs) {
-			setResult(wasm.funcs.Add(5, 3));
+			setResult(wasm.funcs.toGoStruct(json));
 		}
 		console.log(result);
 	};
@@ -23,8 +24,15 @@ function App() {
 	return (
 		<div>
 			<h1>Wasm Consumer</h1>
+
+			<input
+				type="text"
+				id="a"
+				value={json}
+				onChange={(e) => setJson(e.target.value)}
+			/>
 			<button type="button" onClick={onClick}>
-				Add 5 + 3
+				Make Go Struct
 			</button>
 			{result !== null && <p>Result: {result}</p>}
 		</div>
