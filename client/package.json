@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build:go": "cd .. && GOOS=js GOARCH=wasm go build -o ./client/public/main.wasm . && cd client",
+    "build": "yarn run build:go && vite build",
     "format": "biome format --write ./src",
     "lint": "biome lint --write ./src",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/golang-wasm-exec": "^1.15.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
